@@ -98,3 +98,7 @@ Accordingly, and as percribed by the FHIR API, if a patient id is provided then 
 	text: Object
 }
 ````
+
+### More soon ...
+
+... the rest of the FHIR API ...
