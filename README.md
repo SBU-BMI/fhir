@@ -30,6 +30,7 @@ The fhir.js library will mimic the syntax of the FHIR web serviec as closely as 
 Lets start with the list of patients, which is obtained by using  /Patient with no patient id. It is important to recall that calling web services is assynchronous, so a callback function need to be provided as a second input argument. If none is provided then <i>console.log</i> will be used.
 
 ### .Patient(uid,fun)
+
 In this first call we'll retrieve the 50 patients in the demo FHIR service at [open-api.fhir.me](https://open-api.fhir.me):
 
 ````javascript
@@ -100,6 +101,9 @@ Accordingly, and as percribed by the FHIR API, if a patient id is provided then 
 ````
 
 ### Advanced parameterization
+
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/5Z5UtnxM1rk&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.youtube.com/v/5Z5UtnxM1rk&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344"></embed></object>
+
 
 HL7/FHIR [REST API](http://hl7.org/implement/standards/fhir/http.html#summary) defines a number of possibilities for [querying](http://hl7.org/implement/standards/fhir/search.html) which require that a more flexible parameterization mechanism be allowed here. Accordingly, the first input argument of <i>.Patient</i> will be treated as a uid if it is a string but it can be used to assemble a more complex URL is it is an Array or a non Array Object:
 
