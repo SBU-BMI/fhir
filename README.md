@@ -102,7 +102,9 @@ Accordingly, and as percribed by the FHIR API, if a patient id is provided then 
 
 ### Advanced parameterization
 
-<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/5Z5UtnxM1rk&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.youtube.com/v/5Z5UtnxM1rk&hl=en&fs=1" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344"></embed></object>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=5Z5UtnxM1rk
+" target="_blank"><img src="http://img.youtube.com/vi/5Z5UtnxM1rk/0.jpg" 
+alt="click to watch screencast" width="240" height="180" border="10" /></a>
 
 
 HL7/FHIR [REST API](http://hl7.org/implement/standards/fhir/http.html#summary) defines a number of possibilities for [querying](http://hl7.org/implement/standards/fhir/search.html) which require that a more flexible parameterization mechanism be allowed here. Accordingly, the first input argument of <i>.Patient</i> will be treated as a uid if it is a string but it can be used to assemble a more complex URL is it is an Array or a non Array Object:
