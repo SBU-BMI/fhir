@@ -24,7 +24,9 @@ startFHIR=function(){
             if(!uid){ // no uid provided, get the list
                 jQuery.getJSON(this.url+"Patient?_format=json",fun)
             }else{
-                if(uid.length==0){ // to allow for empty strings a la matlab
+                if(typeof(uid)=="string"){
+                    jQuery.getJSON(this.url+'Patient/'+uid+'?_format=json',fun)
+                }else if(uid.length==0){ // to allow for empty Arrays a la matlab
                     this.Patient(false,fun)
                 }else{
                     jQuery.getJSON(this.url+'Patient/?'+this.parmUnpack(uid)+'_format=json',fun)
