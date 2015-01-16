@@ -99,6 +99,30 @@ Accordingly, and as percribed by the FHIR API, if a patient id is provided then 
 }
 ````
 
+### Advanced parameterization
+
+HL7/FHIR [REST API](http://hl7.org/implement/standards/fhir/http.html#summary) defines a number of possibilities for [querying](http://hl7.org/implement/standards/fhir/search.html) which require that a more flexible parameterization mechanism be allowed here. Accordingly, the first input argument of <i>.Patient</i> will be treated as a uid if it is a string but it can be used to assemble a more complex URL is it is an Array or a non Array Object:
+
+* Array
+
+	If uid is and Array then the URL will concatenate each element separated by a "&". For example,
+	
+````javascript
+(new FHIR).Patient(["gender:text=female","address%state:text=OK"])
+````
+
+will return list of patients with a Oklahoma address.
+
+* Object
+
+The same result could have been obtained with a non-array Object, this time concatenating all attribute value pairs:
+
+````javascript
+(new FHIR).Patient({"gender:text":"female","address%state:text":"OK"})
+````
+
+<b style="color:red">Note: I need some help making sense of modifiers, is the use of "%" correct? Anyone?</b>
+
 ### More soon ...
 
 ... the rest of the FHIR API ...

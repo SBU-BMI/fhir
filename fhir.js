@@ -6,15 +6,28 @@ startFHIR=function(){
         if(!url){url="https://open-api.fhir.me/"}
         //this.lala = "ola"
         this.url=url
+        this.parmUnpack=function(x){
+            y=''
+            if(Array.isArray(x)){
+                x.forEach(function(xi){
+                    y+=xi+'&'
+                })
+            } else { // assume Object
+                for(var p in x){
+                    y+=p+'='+x[p]+'&'
+                }
+            }
+            return y
+        }
         this.Patient=function(uid,fun){
             if(!fun){fun = function(x){console.log(x)}}
             if(!uid){ // no uid provided, get the list
                 jQuery.getJSON(this.url+"Patient?_format=json",fun)
             }else{
-                if(uid.length==0){
+                if(uid.length==0){ // to allow for empty strings a la matlab
                     this.Patient(false,fun)
                 }else{
-                    jQuery.getJSON(this.url+'Patient/'+uid+'?_format=json',fun)
+                    jQuery.getJSON(this.url+'Patient/?'+this.parmUnpack(uid)+'_format=json',fun)
                 }
             }
             return this
@@ -30,6 +43,8 @@ if(!window.FHIR){ // load jQuery first
         FHIR = startFHIR()
     }
     document.body.appendChild(s)
-} else {FHIR = startFHIR()}
+} else { // no need to wait
+    FHIR = startFHIR()
+}
         
 
