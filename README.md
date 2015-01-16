@@ -1,5 +1,5 @@
-# fihr
-Playing with <a href="http://www.hl7.org/implement/standards/fhir/" target=_blank>FHIR</a>, HL7 new standard for HTTP-REST data services
+# Playing with <a href="http://www.hl7.org/implement/standards/fhir/" target=_blank>FHIR</a>
+HL7 new standard for HTTP-REST data services
 
 ### Live version
 
