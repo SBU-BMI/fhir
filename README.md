@@ -121,7 +121,7 @@ The same result could have been obtained with a non-array Object, this time conc
 (new FHIR).Patient({"gender:text":"female","address%state:text":"OK"})
 ````
 
-<b style="color:red">Note: I need some help making sense of modifiers, is the use of "%" correct? Anyone?</b>
+<span style="color:red">Note: I need some help making sense of modifiers, is the use of "%" correct? Anyone?</span>
 
 ### More soon ...
 
