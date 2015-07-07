@@ -12,8 +12,8 @@ for a live version see [http://sbu-bmi.github.io/fhir/](http://sbu-bmi.github.io
 
 ### Reference material
 * Fast Healthcare Interoperability Resources (FIHR) web page: [http://www.hl7.org/implement/standards/fhir](http://www.hl7.org/implement/standards/fhir/).
-* All onboard: http://www.healthcareitnews.com/news/epic-cerner-others-join-hl7-project
-* Why EMR companies are adopting FHIR: [video on commoditized interoperability by CERNER](https://www.youtube.com/watch?v=BbBZbo2fMus)
+* All onboard: http://www.healthcareitnews.com/news/epic-cerner-others-join-hl7-project.
+* Why EMR companies are adopting FHIR: [video on commoditized interoperability by CERNER](https://www.youtube.com/watch?v=BbBZbo2fMus).
 * SMART of FIHR: [webpage](http://smartplatforms.org/smart-on-fhir/), [video](http://player.vimeo.com/video/87132298).
 
 ### new FHIR
