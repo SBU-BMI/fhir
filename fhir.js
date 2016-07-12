@@ -1,52 +1,95 @@
 console.log('on fihr.js')
+FHIR = function(url) {
+    if (!url) {
+        url = "https://open-api.fhir.me/"
+    }
+    this.url = url
 
+    this.parmUnpack = function(x) {
+        y = ''
+        if (Array.isArray(x)) {
+            x.forEach(function(xi) {
+                y += xi + '&'
+            })
+        } else {
+            // assume Object
+            for (var p in x) {
+                y += p + '=' + x[p] + '&'
+            }
+        }
+        return y
+    }
 
-startFHIR=function(){
-    var FHIR = function(url){
-        if(!url){url="https://open-api.fhir.me/"}
-        //this.lala = "ola"
-        this.url=url
-        this.parmUnpack=function(x){
-            y=''
-            if(Array.isArray(x)){
-                x.forEach(function(xi){
-                    y+=xi+'&'
-                })
-            } else { // assume Object
-                for(var p in x){
-                    y+=p+'='+x[p]+'&'
+    this.getJSON = function(url, h) {
+        // breaking free from jQuery          
+        var getJSON = function(u, fun, onErr) {
+            if (!u) {
+                u = this.url
+            }
+            if (!fun) {
+                fun = function(x) {
+                    console.log('retrieved:', x)
                 }
             }
-            return y
-        }
-        this.Patient=function(uid,fun){
-            if(!fun){fun = function(x){console.log(x)}}
-            if(!uid){ // no uid provided, get the list
-                jQuery.getJSON(this.url+"Patient?_format=json",fun)
-            }else{
-                if(typeof(uid)=="string"){
-                    jQuery.getJSON(this.url+'Patient/'+uid+'?_format=json',fun)
-                }else if(uid.length==0){ // to allow for empty Arrays a la matlab
-                    this.Patient(false,fun)
-                }else{
-                    jQuery.getJSON(this.url+'Patient/?'+this.parmUnpack(uid)+'_format=json',fun)
+            if (!onErr) {
+                onErr = function(x) {
+                    console.log('error: ', x)
                 }
             }
-            return this
+            var c = 0
+            var xhr = new XMLHttpRequest()
+            xhr.open('get', u, true)
+            // protocol, target url and assynchronicity
+            xhr.send()
+            /*
+                xhr.onprogress=function(){
+                    c++
+                    console.log(c+') in progress at ',Date())
+                }
+                */
+            xhr.onload = function(x) {
+                try {
+                    fun(JSON.parse(x.target.response))
+                } catch (e) {
+                    onErr(e)
+                }
+            }
+            xhr.onerror = function(x) {// I don't understand who's listening to this event
+            }
+        }
+        return new Promise(function(resolve, reject) {
+            getJSON(url, function(x) {
+                resolve(x)
+            }, function(x) {
+                reject(x)
+            })
+        }
+        )
+    }
+
+    this.Patient = function(uid, fun) {
+        //if(!fun){fun = function(x){console.log(x)}}
+        if (fun) {
+            return this.Patient(uid).then(function(x) {
+                fun(x)
+            }).catch(function(e) {
+                console.log('error: ', e)
+            })
+        } else {
+            if (!uid) {
+                // no uid provided, get the list
+                return this.getJSON(this.url + "Patient?_format=json")
+            } else {
+                if (typeof (uid) == "string") {
+                    return this.getJSON(this.url + 'Patient/' + uid + '?_format=json')
+                } else if (uid.length == 0) {
+                    // to allow for empty Arrays a la matlab
+                    return this.Patient(false)
+                } else {
+                    return this.getJSON(this.url + 'Patient/?' + this.parmUnpack(uid) + '_format=json')
+                }
+            }
         }
     }
-    return FHIR
+    // ...
 }
-
-if(!window.FHIR){ // load jQuery first
-    var s = document.createElement('script')
-    s.src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
-    s.onload=function(){
-        FHIR = startFHIR()
-    }
-    document.body.appendChild(s)
-} else { // no need to wait
-    FHIR = startFHIR()
-}
-        
-
