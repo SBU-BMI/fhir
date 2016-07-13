@@ -91,5 +91,53 @@ FHIR = function(url) {
             }
         }
     }
+
+    this.pre=function(x,id){ // show JSON in a <pre> element, create one if t doesn't exist
+        if(!id){
+            id='FHIRpre'
+        }
+        if(!document.getElementById(id)){
+            var pre = document.createElement('pre')
+            pre.id=id
+            document.body.appendChild(pre)
+        }
+        var pre = document.getElementById(id)
+        pre.innerHTML=JSON.stringify(x,null,3)
+        pre.style.color='blue'
+        4
+
+    }
     // ...
 }
+
+
+/// UI tests
+
+ui1 = function(){
+    // list patients
+    var x = new FHIR()
+    var div = document.createElement('div')
+    div.id='ui1'
+    document.body.appendChild(div)
+    var h = '<button id="getPatientData">Get Patient data</button><pre id="FHIRpre"></pre>'
+    div.innerHTML=h
+    var getPatientDataButton = document.getElementById('getPatientData')
+    getPatientDataButton.onclick=function(){
+        x.Patient()
+         .then(function(dt){
+             x.pre(dt)
+         })
+    }
+    
+        
+
+
+
+    4
+
+
+}
+
+
+ui1()
+
