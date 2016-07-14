@@ -169,6 +169,7 @@ if(location.href.match('http://localhost:8000/fhir/')||location.href.match('sbu-
    ui1() // don't show this test in other domains
 }
 
+/*
 f = new FHIR
 f.Patient().then(function(x){console.log(x)})
 f.Patient('',function(x){
@@ -178,3 +179,4 @@ f.Patient('',function(x){
 	})
 	console.log(P)
 })
+*/
