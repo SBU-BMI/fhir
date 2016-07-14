@@ -68,8 +68,7 @@ FHIR = function(url) {
             }, function(x) {
                 reject(x)
             })
-        }
-        )
+        })
     }
 
     this.Patient = function(q, fun) { // this implementation targets the SMART service.
@@ -170,4 +169,12 @@ if(location.href.match('http://localhost:8000/fhir/')||location.href.match('sbu-
    ui1() // don't show this test in other domains
 }
 
-
+f = new FHIR
+f.Patient().then(function(x){console.log(x)})
+f.Patient('',function(x){
+	P = []; 
+	x.entry.forEach(function(e){
+		P.push(e.id)
+	})
+	console.log(P)
+})

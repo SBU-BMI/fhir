@@ -37,7 +37,7 @@ In this first call we'll retrieve the 50 patients in the demo FHIR service at [o
 
 ````javascript
 > f = new FHIR
-> f.Patient()
+> f.Patient().then(function(x){console.log(x)})
 
 {
 	author: Array[1],
@@ -59,8 +59,22 @@ An example of a callback function could be listing the uids of those 50 patients
 	x.entry.forEach(function(e){
 		P.push(e.id)
 	})
+	console.log(P)
 })
 ````
+
+which relies on a regular callback function. Promises are also supported so one could instead use 
+
+````javascript
+> f.Patient().then(function(x){
+	P = []; 
+	x.entry.forEach(function(e){
+		P.push(e.id)
+	})
+	console.log(P)
+})
+````
+
 
 which populate the array P with the 50 patients ids:
 
@@ -80,7 +94,7 @@ Accordingly, and as percribed by the FHIR API, if a patient id is provided then 
 
 
 ````javascript
-> f.Patient('1081332')
+> f.Patient('1081332').then(function(x){console.log(x)})
 
 {
 	active: true,
@@ -126,7 +140,7 @@ will return list of patients with a Oklahoma address.
 The same result could have been obtained with a non-array Object, this time concatenating all attribute value pairs:
 
 ````javascript
-(new FHIR).Patient({"gender:text":"female","address%state:text":"OK"})
+(new FHIR).Patient({"gender:text":"female","address%state:text":"OK"}).then(function(x){console.log(x)})
 ````
 
 <span style="color:red">Note: I need some help making sense of modifiers, is the use of "%" correct? Anyone?</span>
