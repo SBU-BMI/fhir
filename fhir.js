@@ -122,7 +122,7 @@ ui1 = function(){
     div.id='ui1'
     div.className="container"
     document.body.appendChild(div)
-    var h = '<hr><p><button id="getPatientDataSmart" type="button" class="btn btn-success">Get Patient Data (SMART)</button> name=<input id="getPatientDataSmartName" value="Ross"></p><p><button id="getPatientDataCerner" type="button" class="btn btn-primary">Get Patient Data (CERNER)</button> name=<input id="getPatientDataCernerName" value="Smith"><hr><pre id="FHIRpre">click on Get Patient Data above</pre></p>'
+    var h = '<hr><p><button id="getPatientDataSmart" type="button" class="btn btn-success">Get Patient Data (SMART)</button> name=<input id="getPatientDataSmartName" value="Ross"></p><p><button id="getPatientDataCerner" type="button" class="btn btn-primary">Get Patient Data (CERNER)</button> name=<input id="getPatientDataCernerName" value="Ross"><hr><pre id="FHIRpre">click on Get Patient Data above</pre></p>'
     div.innerHTML=h
     var getPatientDataSmartButton = document.getElementById('getPatientDataSmart')
     getPatientDataSmartButton.onclick=function(){
