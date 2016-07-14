@@ -5,6 +5,10 @@ FHIR = function(url) {
     }
     this.url = url
 
+    // index instance
+    FHIR.dir[url]=this
+    console.log('FHIR instance indexed with URL='+url)
+
     this.parmUnpack = function(x) {
         y = ''
         if (Array.isArray(x)) {
@@ -112,6 +116,7 @@ FHIR = function(url) {
     }
     // ...
 }
+FHIR.dir={}
 
 
 /// UI tests
@@ -126,8 +131,12 @@ ui1 = function(){
     div.innerHTML=h
     var getPatientDataSmartButton = document.getElementById('getPatientDataSmart')
     getPatientDataSmartButton.onclick=function(){
-        var x = new FHIR() // SMART
-        FHIRpre.innerHTML='retrieving data from '+x.url+' ...'
+        var url = 'https://open-api.fhir.me/'
+        if(FHIR.dir[url]){
+            var x=FHIR.dir[url]
+        }else{
+            var x = new FHIR(url)
+        }FHIRpre.innerHTML='retrieving data from '+x.url+' ...'
         FHIRpre.style.color='red'
         x.Patient('name='+getPatientDataSmartName.value)
          .then(function(dt){
@@ -139,7 +148,12 @@ ui1 = function(){
     }
     var getPatientDataCernerButton = document.getElementById('getPatientDataCerner')
     getPatientDataCernerButton.onclick=function(){
-        var x = new FHIR('https://fhir-open.sandboxcernerpowerchart.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/') // SMART
+        var url = 'https://fhir-open.sandboxcernerpowerchart.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/'
+        if(FHIR.dir[url]){
+            var x=FHIR.dir[url]
+        }else{
+            var x = new FHIR(url)
+        }
         FHIRpre.innerHTML='retrieving data from '+x.url+' ...'
         FHIRpre.style.color='red'
         x.Patient('name='+getPatientDataCernerName.value)
