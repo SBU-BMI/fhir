@@ -20,7 +20,7 @@ FHIR = function(url) {
         return y
     }
 
-    this.getJSON = function(url, h) {
+    this.getJSON = function(url) {
         // breaking free from jQuery          
         var getJSON = function(u, fun, onErr) {
             if (!u) {
@@ -39,6 +39,7 @@ FHIR = function(url) {
             var c = 0
             var xhr = new XMLHttpRequest()
             xhr.open('get', u, true)
+            xhr.setRequestHeader('Accept','application/json') // needed by some services like Cerner's
             // protocol, target url and assynchronicity
             xhr.send()
             /*
@@ -67,26 +68,28 @@ FHIR = function(url) {
         )
     }
 
-    this.Patient = function(uid, fun) {
+    this.Patient = function(q, fun) { // this implementation targets the SMART service.
+        // Generalizing to other services is under stydy,
+        // not clear that FHIR is sufficiently standard accross the board for that yet.
         //if(!fun){fun = function(x){console.log(x)}}
         if (fun) {
-            return this.Patient(uid).then(function(x) {
+            return this.Patient(q).then(function(x) {
                 fun(x)
             }).catch(function(e) {
                 console.log('error: ', e)
             })
         } else {
-            if (!uid) {
-                // no uid provided, get the list
+            if (!q) {
+                // no q provided, get the list
                 return this.getJSON(this.url + "Patient?_format=json")
             } else {
-                if (typeof (uid) == "string") {
-                    return this.getJSON(this.url + 'Patient/' + uid + '?_format=json')
-                } else if (uid.length == 0) {
+                if (typeof (q) == "string") {
+                    return this.getJSON(this.url + 'Patient/?_format=json&' + q)
+                } else if (q.length == 0) {
                     // to allow for empty Arrays a la matlab
                     return this.Patient(false)
                 } else {
-                    return this.getJSON(this.url + 'Patient/?' + this.parmUnpack(uid) + '_format=json')
+                    return this.getJSON(this.url + 'Patient/?_format=json&' + this.parmUnpack(q) + '')
                 }
             }
         }
@@ -115,29 +118,42 @@ FHIR = function(url) {
 
 ui1 = function(){
     // list patients
-    var x = new FHIR()
     var div = document.createElement('div')
     div.id='ui1'
+    div.className="container"
     document.body.appendChild(div)
-    var h = '<button id="getPatientData">Get Patient data</button><pre id="FHIRpre"></pre>'
+    var h = '<hr><p><button id="getPatientDataSmart" type="button" class="btn btn-success">Get Patient Data (SMART)</button> name=<input id="getPatientDataSmartName" value="Ross"></p><p><button id="getPatientDataCerner" type="button" class="btn btn-primary">Get Patient Data (CERNER)</button> name=<input id="getPatientDataCernerName" value="Smith"><hr><pre id="FHIRpre">click on Get Patient Data above</pre></p>'
     div.innerHTML=h
-    var getPatientDataButton = document.getElementById('getPatientData')
-    getPatientDataButton.onclick=function(){
-        x.Patient()
+    var getPatientDataSmartButton = document.getElementById('getPatientDataSmart')
+    getPatientDataSmartButton.onclick=function(){
+        var x = new FHIR() // SMART
+        FHIRpre.innerHTML='retrieving data from '+x.url+' ...'
+        FHIRpre.style.color='red'
+        x.Patient('name='+getPatientDataSmartName.value)
          .then(function(dt){
              x.pre(dt)
          })
+         .catch(function(er){
+             x.pre('error:'+er)
+         })
     }
-    
-        
-
-
-
-    4
-
-
+    var getPatientDataCernerButton = document.getElementById('getPatientDataCerner')
+    getPatientDataCernerButton.onclick=function(){
+        var x = new FHIR('https://fhir-open.sandboxcernerpowerchart.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/') // SMART
+        FHIRpre.innerHTML='retrieving data from '+x.url+' ...'
+        FHIRpre.style.color='red'
+        x.Patient('name='+getPatientDataCernerName.value)
+         .then(function(dt){
+             x.pre(dt)
+         })
+         .catch(function(er){
+             x.pre('error:'+er)
+         })
+    }
 }
 
+if(location.href.match('http://localhost:8000/fhir/')||location.href.match('sbu-bmi.github.io/fhir')){
+   ui1() // don't show this test in other domains
+}
 
-ui1()
 
