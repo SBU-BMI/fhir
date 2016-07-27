@@ -98,6 +98,50 @@ FHIR = function(url) {
         }
     }
 
+    this.PatientList=function(q,id){ //list of patients given a query such as name=Smith
+        if(!q){q='name=Ross'}
+        if(!id){id='PatientListDiv'}
+        this.Patient(q)
+         .then(function(x){
+             if(!x.entry){x.entry=[]}
+             var h='<div>'
+             h +='<h3>Found '+x.entry.length+' patients with '+q+'</h3>'
+             h +='<table  class="table">'
+             h +='<thead><tr style="color:blue">'
+             // find parameters
+             if(!x.entry[0].resource){
+                 if(x.entry[0].content){
+                     x.entry=x.entry.map(function(xi){
+                         xi.resource=xi.content
+                         return xi
+                     })
+                     4
+                 }
+             }
+             var parms = Object.getOwnPropertyNames(x.entry[0].resource)
+             parms.forEach(function(p){
+                  h +='<td>'+p+'</td>'
+             })
+             h +='<tr></thead>'
+             h +='<tbody>'
+             x.entry.forEach(function(xi){
+                 h+='<tr valign="top">'
+                 parms.forEach(function(p){
+                     h +='<td>'+JSON.stringify(xi.resource[p],null,3)+'</td>'
+                 })
+                 //h+='<td><a href="'+xi.fullUrl+'" target=_blank>link</a><td>'
+                 h+='</tr>'
+             })
+             h +='</tbody>'
+             h +='</table>'
+             h +='</div>'
+             var div = document.getElementById('PatientListDiv')
+             div.innerHTML=h
+             4
+         })
+
+    }
+
     this.pre=function(x,id){ // show JSON in a <pre> element, create one if t doesn't exist
         if(!id){
             id='FHIRpre'
@@ -126,7 +170,7 @@ ui1 = function(){
     div.id='ui1'
     div.className="container"
     document.body.appendChild(div)
-    var h = '<hr><p><button id="getPatientDataSmart" type="button" class="btn btn-success">Get Patient Data (SMART)</button> name=<input id="getPatientDataSmartName" value="Ross"></p><p><button id="getPatientDataCerner" type="button" class="btn btn-primary">Get Patient Data (CERNER)</button> name=<input id="getPatientDataCernerName" value="Ross"><hr><pre id="FHIRpre">click on Get Patient Data above</pre></p>'
+    var h = '<hr><p><button id="getPatientDataSmart" type="button" class="btn btn-success">Get Patient Data (SMART)</button> name=<input id="getPatientDataSmartName" value="Ross"></p><p><button id="getPatientDataCerner" type="button" class="btn btn-primary">Get Patient Data (CERNER)</button> name=<input id="getPatientDataCernerName" value="Ross"><hr><div id="PatientListDiv"></div><hr><pre id="FHIRpre">click on Get Patient Data above</pre></p>'
     div.innerHTML=h
     var getPatientDataSmartButton = document.getElementById('getPatientDataSmart')
     getPatientDataSmartButton.onclick=function(){
@@ -144,6 +188,8 @@ ui1 = function(){
          .catch(function(er){
              x.pre('error:'+er)
          })
+        x.PatientList('name='+getPatientDataSmartName.value)
+        
     }
     var getPatientDataCernerButton = document.getElementById('getPatientDataCerner')
     getPatientDataCernerButton.onclick=function(){
@@ -162,6 +208,7 @@ ui1 = function(){
          .catch(function(er){
              x.pre('error:'+er)
          })
+         x.PatientList('name='+getPatientDataCernerName.value)
     }
 }
 
